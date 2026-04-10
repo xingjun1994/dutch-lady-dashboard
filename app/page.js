@@ -1,5 +1,6 @@
 'use client';
 
+import Login from '../components/Login';
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import FilterBar from '@/components/FilterBar';
@@ -24,6 +25,7 @@ const MEDIUM_COLORS = {
 export default function Home() {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [authed, setAuthed] = useState(false);
   const [error, setError] = useState(null);
   const [activePage, setActivePage] = useState({ type: 'overview' });
   const [year, setYear] = useState(2026);
@@ -81,6 +83,12 @@ export default function Home() {
 
   const { title, sub } = getPageTitle();
 
+  if (!authed) {
+  if (typeof window !== 'undefined' && sessionStorage.getItem('dl_auth') === 'true') {
+    setAuthed(true);
+  }
+  return <Login onSuccess={() => setAuthed(true)} />;
+}
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: 12 }}>
       <div style={{ width: 32, height: 32, border: '3px solid #EBF1FB', borderTop: '3px solid #003DA5', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
